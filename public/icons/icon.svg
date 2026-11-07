@@ -1,4 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <rect width="512" height="512" fill="#0f172a" />
-  <text x="256" y="330" font-size="260" font-family="Segoe UI, sans-serif" font-weight="900" fill="#ffffff" text-anchor="middle">P</text>
+  <path d="M96 200 L128 112 H384 L416 200 Z" fill="#f59e0b" />
+  <path d="M96 200 q40 44 80 0 q40 44 80 0 q40 44 80 0 q40 44 80 0 V216 H96 Z" fill="#fbbf24" />
+  <rect x="120" y="236" width="272" height="168" rx="6" fill="#f8fafc" />
+  <rect x="168" y="292" width="84" height="112" rx="4" fill="#0f172a" />
+  <rect x="284" y="276" width="76" height="66" rx="4" fill="#38bdf8" />
+  <rect x="96" y="404" width="320" height="16" rx="6" fill="#94a3b8" />
 </svg>

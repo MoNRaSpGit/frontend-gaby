@@ -10,13 +10,14 @@ import { SelectClientModal } from "./components/SelectClientModal";
 import { useGabyCart } from "./hooks/useGabyCart";
 import type { GabyClient } from "./gaby.types";
 import { ClientesScreen } from "./screens/ClientesScreen";
+import { StockScreen } from "./screens/StockScreen";
 import { setAppBusy } from "../../shared/state/appActivity";
 
 // Gaby Almacen (07/11/2026): version BASICA de Piloto -- escaner, venta,
 // "fiar" a la cuenta corriente de un cliente. Sin cajas, sin modo Pro, sin
 // tablet del fondo, sin precios/tickets ni impresion (la clienta pidio solo
-// lo basico). Dos pestanas: Productos y Clientes.
-type GabyTopTab = "productos" | "clientes";
+// lo basico). Pestanas: Productos, Clientes y Stock.
+type GabyTopTab = "productos" | "clientes" | "stock";
 
 const NOT_FOUND_MESSAGE = "Producto no encontrado.";
 // No se elige medio de pago en la UI: se manda siempre este valor fijo.
@@ -33,7 +34,7 @@ const ACTIVE_TAB_STORAGE_KEY = "gaby-active-top-tab";
 function loadStoredTopTab(): GabyTopTab | null {
   try {
     const stored = window.localStorage.getItem(ACTIVE_TAB_STORAGE_KEY);
-    return stored === "productos" || stored === "clientes" ? stored : null;
+    return stored === "productos" || stored === "clientes" || stored === "stock" ? stored : null;
   } catch {
     return null;
   }
@@ -231,7 +232,7 @@ export function GabyHomePage() {
   }
 
   return (
-    <main className={activeTopTab === "clientes" ? "gaby-shell gaby-shell--wide" : "gaby-shell"}>
+    <main className={activeTopTab === "clientes" || activeTopTab === "stock" ? "gaby-shell gaby-shell--wide" : "gaby-shell"}>
       <header className="gaby-header gaby-header--with-nav">
         <span className="gaby-kicker">Gaby Almacén</span>
 
@@ -254,11 +255,22 @@ export function GabyHomePage() {
           >
             Clientes
           </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTopTab === "stock"}
+            className={activeTopTab === "stock" ? "gaby-header-nav-tab is-active" : "gaby-header-nav-tab"}
+            onClick={() => setActiveTopTab("stock")}
+          >
+            Stock
+          </button>
         </nav>
       </header>
 
       {activeTopTab === "clientes" ? (
         <ClientesScreen onClose={() => setActiveTopTab("productos")} />
+      ) : activeTopTab === "stock" ? (
+        <StockScreen onClose={() => setActiveTopTab("productos")} />
       ) : (
         <>
           <ScannerInput

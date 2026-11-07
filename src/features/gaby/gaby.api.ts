@@ -188,3 +188,21 @@ export async function settleAccount(clientId: number): Promise<void> {
 
 // Pestana "Tickets" (Modo Pro, 24/10/2026): productos con codigo de barras
 // inventado para imprimir en la tiquetera. Editar = updateProduct.
+
+// Pestana Stock (07/11/2026). Sin texto: solo los que tienen stock cargado.
+export async function listStock(search?: string): Promise<GabyProduct[]> {
+  const query = search?.trim() ? `?search=${encodeURIComponent(search.trim())}` : "";
+  const response = await fetch(`${API_BASE_URL}/gaby/stock${query}`, { cache: "no-store" });
+  const raw = await readJson<{ items: RawGabyProduct[] }>(response);
+  return raw.items.map(mapProduct);
+}
+
+export async function setProductStock(productId: number, stock: number): Promise<GabyProduct> {
+  const response = await fetch(`${API_BASE_URL}/gaby/products/${productId}/stock`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ stock })
+  });
+  const raw = await readJson<RawProductResponse>(response);
+  return mapProduct(raw.item);
+}

@@ -82,26 +82,26 @@ export async function findProductByBarcode(barcode: string): Promise<ProductResp
   return { item: mapProduct(raw.item) };
 }
 
-export async function createProduct(barcode: string, name: string, price: number): Promise<ProductResponse> {
+export async function createProduct(barcode: string, name: string, price: number, stock?: number): Promise<ProductResponse> {
   const response = await fetch(`${API_BASE_URL}/gaby/products`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ barcode: normalizeBarcode(barcode), name, price })
+    body: JSON.stringify({ barcode: normalizeBarcode(barcode), name, price, ...(stock !== undefined ? { stock } : {}) })
   });
 
   const raw = await readJson<RawProductResponse>(response);
   return { item: mapProduct(raw.item) };
 }
 
-export async function updateProduct(productId: number, name: string, price: number): Promise<ProductResponse> {
+export async function updateProduct(productId: number, name: string, price: number, stock?: number): Promise<ProductResponse> {
   const response = await fetch(`${API_BASE_URL}/gaby/products/${productId}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ name, price })
+    body: JSON.stringify({ name, price, ...(stock !== undefined ? { stock } : {}) })
   });
 
   const raw = await readJson<RawProductResponse>(response);

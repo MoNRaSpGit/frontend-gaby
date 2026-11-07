@@ -6,6 +6,8 @@ export type GabyProduct = {
   barcode: string;
   price: number;
   stock: number;
+  // true = ya se le cargo un stock a mano (aunque sea 0).
+  stockTracked: boolean;
   imageUrl: string | null;
   status: GabyProductStatus;
   createdAt: string;
@@ -28,6 +30,8 @@ export type CartItem = {
   price: number;
   quantity: number;
   imageUrl: string | null;
+  // Stock registrado del producto (null / sin definir = todavia no se cargo).
+  stock?: number | null;
   // "Producto no encontrado" desde la tablet del fondo (03/11/2026): el
   // codigo que no estaba en el catalogo. Al editar esta linea en el
   // mostrador, en vez de solo renombrar el renglon, se crea el producto

@@ -8,7 +8,7 @@ type ScannerCartProps = {
   lastScannedProductId: number | null;
   onAddOne: (productId: number) => void;
   onRemoveOne: (productId: number) => void;
-  onEdit: (productId: number, changes: { name: string; price: number }) => Promise<boolean>;
+  onEdit: (productId: number, changes: { name: string; price: number; stock?: number }) => Promise<boolean>;
   // Se maneja en el padre (GabyHomePage), no adentro de este
   // componente, para que el efecto general que devuelve el foco al
   // buscador tambien se entere de cuando este modal se abre/cierra
@@ -52,7 +52,7 @@ function EditItemModal({
 }: {
   item: CartItem;
   onClose: () => void;
-  onSave: (changes: { name: string; price: number }) => Promise<boolean>;
+  onSave: (changes: { name: string; price: number; stock?: number }) => Promise<boolean>;
 }) {
   // "S/N" (Sin Nombre) es el valor que se guarda cuando el producto se creo
   // sin nombre (ver ScannerQuickAddModal, mas abajo en este mismo archivo)
@@ -61,6 +61,8 @@ function EditItemModal({
   // a mano antes de escribir el nombre real.
   const [name, setName] = useState(item.name === "S/N" ? "" : item.name);
   const [price, setPrice] = useState(String(item.price));
+  // Stock OPCIONAL (07/11/2026): vacio = no se toca el stock.
+  const [stock, setStock] = useState(item.stock != null ? String(item.stock) : "");
   const [error, setError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -73,6 +75,7 @@ function EditItemModal({
   useEffect(() => {
     setName(item.name === "S/N" ? "" : item.name);
     setPrice(String(item.price));
+    setStock(item.stock != null ? String(item.stock) : "");
     setError("");
   }, [item]);
 
@@ -108,9 +111,20 @@ function EditItemModal({
       return;
     }
 
+    // Stock opcional: vacio = no se manda; si hay algo tiene que ser 0 o mas.
+    const trimmedStock = stock.trim();
+    let parsedStock: number | undefined;
+    if (trimmedStock !== "") {
+      parsedStock = Number(trimmedStock.replace(",", "."));
+      if (!Number.isFinite(parsedStock) || parsedStock < 0) {
+        setError("El stock tiene que ser 0 o mas (o dejalo vacio).");
+        return;
+      }
+    }
+
     setError("");
     setIsSaving(true);
-    const ok = await onSave({ name: trimmedName, price: parsedPrice });
+    const ok = await onSave({ name: trimmedName, price: parsedPrice, ...(parsedStock !== undefined ? { stock: parsedStock } : {}) });
     setIsSaving(false);
 
     if (ok) {
@@ -153,6 +167,19 @@ function EditItemModal({
               disabled={isSaving}
             />
           </label>
+
+          {item.productId > 0 ? (
+            <label className="gaby-modal-field">
+              <span>Stock (opcional)</span>
+              <input
+                value={stock}
+                onChange={(event) => setStock(event.target.value)}
+                inputMode="decimal"
+                placeholder="Sin cargar"
+                disabled={isSaving}
+              />
+            </label>
+          ) : null}
 
           {error ? <p className="gaby-scanner-status gaby-scanner-status--error">{error}</p> : null}
 

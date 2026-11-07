@@ -5,12 +5,14 @@ import { sanitizePriceInput } from "../services/gaby.priceInput";
 type ScannerQuickAddModalProps = {
   barcode: string;
   onClose: () => void;
-  onConfirm: (name: string, price: number) => Promise<boolean>;
+  onConfirm: (name: string, price: number, stock?: number) => Promise<boolean>;
 };
 
 export function ScannerQuickAddModal({ barcode, onClose, onConfirm }: ScannerQuickAddModalProps) {
   const [name, setName] = useState("");
   const [priceInput, setPriceInput] = useState("");
+  // Stock OPCIONAL (07/11/2026): vacio = el producto queda sin stock cargado.
+  const [stockInput, setStockInput] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const priceInputRef = useRef<HTMLInputElement>(null);
@@ -49,9 +51,19 @@ export function ScannerQuickAddModal({ barcode, onClose, onConfirm }: ScannerQui
       return;
     }
 
+    const trimmedStock = stockInput.trim();
+    let parsedStock: number | undefined;
+    if (trimmedStock !== "") {
+      parsedStock = Number(trimmedStock.replace(",", "."));
+      if (!Number.isFinite(parsedStock) || parsedStock < 0) {
+        setError("El stock tiene que ser 0 o mas (o dejalo vacio).");
+        return;
+      }
+    }
+
     setError("");
     setIsSubmitting(true);
-    const ok = await onConfirm(name.trim() || "S/N", parsedPrice);
+    const ok = await onConfirm(name.trim() || "S/N", parsedPrice, parsedStock);
     setIsSubmitting(false);
 
     if (!ok) {
@@ -92,6 +104,17 @@ export function ScannerQuickAddModal({ barcode, onClose, onConfirm }: ScannerQui
               onChange={(event) => setPriceInput(sanitizePriceInput(event.target.value))}
               inputMode="decimal"
               placeholder="Ej: 150"
+              disabled={isSubmitting}
+            />
+          </label>
+
+          <label className="gaby-modal-field">
+            <span>Stock (opcional)</span>
+            <input
+              value={stockInput}
+              onChange={(event) => setStockInput(event.target.value)}
+              inputMode="decimal"
+              placeholder="Sin cargar"
               disabled={isSubmitting}
             />
           </label>

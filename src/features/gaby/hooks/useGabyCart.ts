@@ -59,7 +59,14 @@ export function useGabyCart(registerIds: GabyRegisterId[] = DEFAULT_GABY_REGISTE
       const nextCartItems = existing
         ? [{ ...existing, quantity: existing.quantity + 1 }, ...state.cartItems.filter((item) => item.productId !== product.id)]
         : [
-            { productId: product.id, name: product.name, price: product.price, quantity: 1, imageUrl: product.imageUrl },
+            {
+              productId: product.id,
+              name: product.name,
+              price: product.price,
+              quantity: 1,
+              imageUrl: product.imageUrl,
+              stock: product.stockTracked ? product.stock : null
+            },
             ...state.cartItems
           ];
       return { cartItems: nextCartItems, lastScannedProductId: product.id };
@@ -132,10 +139,10 @@ export function useGabyCart(registerIds: GabyRegisterId[] = DEFAULT_GABY_REGISTE
     }));
   }
 
-  function updateItem(productId: number, changes: { name: string; price: number }) {
+  function updateItem(productId: number, changes: { name: string; price: number; stock?: number }) {
     updateActiveRegister((state) => ({
       ...state,
-      cartItems: state.cartItems.map((item) => (item.productId === productId ? { ...item, name: changes.name, price: changes.price } : item))
+      cartItems: state.cartItems.map((item) => (item.productId === productId ? { ...item, name: changes.name, price: changes.price, ...(changes.stock !== undefined ? { stock: changes.stock } : {}) } : item))
     }));
   }
 

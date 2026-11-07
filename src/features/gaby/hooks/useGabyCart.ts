@@ -1,0 +1,189 @@
+import { useMemo, useRef, useState } from "react";
+import type { CartItem, GabyProduct } from "../gaby.types";
+
+// Cajas independientes (22/09/2026, pedido explicito): "no crear dos
+// pantallas diferentes ni duplicar la logica de productos... dos
+// estados/carritos independientes dentro de la misma pantalla". Por eso
+// esto sigue siendo UN SOLO hook con una sola implementacion de cada
+// accion (addProduct, addOne, etc.) -- lo unico que cambia es que cada
+// accion opera sobre el carrito de la caja ACTIVA en vez de un carrito
+// unico. El resto de la app (GabyHomePage, ScannerCart, etc.) sigue
+// viendo la misma forma de siempre (cartItems, lastScannedProductId,
+// total...), sin enterarse de que por dentro hay mas de una caja.
+//
+// "Facil agregar mas cajas": son las que haya en DEFAULT_REGISTER_IDS,
+// nada mas -- agregar un 3 al array alcanza para tener "Caja 3".
+export type GabyRegisterId = number;
+
+export const DEFAULT_GABY_REGISTER_IDS: GabyRegisterId[] = [1];
+
+type RegisterState = {
+  cartItems: CartItem[];
+  lastScannedProductId: number | null;
+};
+
+type RegisterSummary = {
+  id: GabyRegisterId;
+  count: number;
+};
+
+function createEmptyRegisterState(): RegisterState {
+  return { cartItems: [], lastScannedProductId: null };
+}
+
+export function useGabyCart(registerIds: GabyRegisterId[] = DEFAULT_GABY_REGISTER_IDS) {
+  const [activeRegisterId, setActiveRegisterId] = useState<GabyRegisterId>(registerIds[0]);
+  const [registers, setRegisters] = useState<Record<GabyRegisterId, RegisterState>>(() =>
+    Object.fromEntries(registerIds.map((id) => [id, createEmptyRegisterState()]))
+  );
+  // Ids manuales negativos: UN SOLO contador global (no uno por caja), para
+  // que nunca se repitan aunque dos cajas tengan items manuales cargados
+  // al mismo tiempo.
+  const nextManualIdRef = useRef(-1);
+
+  const activeRegister = registers[activeRegisterId];
+  const cartItems = activeRegister.cartItems;
+  const lastScannedProductId = activeRegister.lastScannedProductId;
+
+  function updateRegister(registerId: GabyRegisterId, updater: (state: RegisterState) => RegisterState) {
+    setRegisters((current) => ({ ...current, [registerId]: updater(current[registerId]) }));
+  }
+
+  function updateActiveRegister(updater: (state: RegisterState) => RegisterState) {
+    updateRegister(activeRegisterId, updater);
+  }
+
+  function addProduct(product: GabyProduct) {
+    updateActiveRegister((state) => {
+      const existing = state.cartItems.find((item) => item.productId === product.id);
+      const nextCartItems = existing
+        ? [{ ...existing, quantity: existing.quantity + 1 }, ...state.cartItems.filter((item) => item.productId !== product.id)]
+        : [
+            { productId: product.id, name: product.name, price: product.price, quantity: 1, imageUrl: product.imageUrl },
+            ...state.cartItems
+          ];
+      return { cartItems: nextCartItems, lastScannedProductId: product.id };
+    });
+  }
+
+  // Producto sin codigo (ej: fruta/verdura suelta): siempre crea una linea nueva,
+  // nunca suma cantidad a una existente, y jamas se guarda como producto real.
+  // `name` (23/09/2026, pedido explicito): los 4 botones de categoria de
+  // Modo Pro reusan este mismo metodo, solo cambiando el nombre que queda
+  // en la venta -- "Producto Manual" sigue siendo el valor por defecto,
+  // asi que el boton original no cambia en nada.
+  function addManualItem(price: number, name: string = "Producto Manual") {
+    const productId = nextManualIdRef.current;
+    nextManualIdRef.current -= 1;
+
+    updateActiveRegister((state) => ({
+      cartItems: [{ productId, name, price, quantity: 1, imageUrl: null }, ...state.cartItems],
+      lastScannedProductId: productId
+    }));
+  }
+
+  // "Precios" -- Modo Pro (23/09/2026, pedido explicito): boton "Agregar"
+  // en cada precio, elige a que caja va (no necesariamente la activa --
+  // podes estar viendo Precios con Caja 1 activa y mandar el producto a
+  // Caja 2). Mismo mecanismo que addManualItem (id negativo, nunca
+  // producto real), solo que apunta a la caja que se elija en vez de
+  // siempre la activa. Una vez adentro, es indistinguible de un Producto
+  // Manual cargado a mano en esa caja.
+  function addManualItemToRegister(registerId: GabyRegisterId, price: number, name: string) {
+    const productId = nextManualIdRef.current;
+    nextManualIdRef.current -= 1;
+
+    updateRegister(registerId, (state) => ({
+      cartItems: [{ productId, name, price, quantity: 1, imageUrl: null }, ...state.cartItems],
+      lastScannedProductId: productId
+    }));
+  }
+
+  // Venta del "fondo" (30/10/2026): suma a la caja ACTIVA los productos que
+  // se escanearon en la tablet del fondo. Si un producto ya estaba en la
+  // caja, se suman las cantidades.
+  function addCartItems(items: CartItem[]) {
+    if (!items.length) return;
+    updateActiveRegister((state) => {
+      let nextCartItems = state.cartItems;
+      for (const incoming of items) {
+        const existing = nextCartItems.find((item) => item.productId === incoming.productId);
+        nextCartItems = existing
+          ? nextCartItems.map((item) => (item.productId === incoming.productId ? { ...item, quantity: item.quantity + incoming.quantity } : item))
+          : [incoming, ...nextCartItems];
+      }
+      return { cartItems: nextCartItems, lastScannedProductId: items[0].productId };
+    });
+  }
+
+  function addOne(productId: number) {
+    updateActiveRegister((state) => ({
+      cartItems: state.cartItems.map((item) => (item.productId === productId ? { ...item, quantity: item.quantity + 1 } : item)),
+      lastScannedProductId: productId
+    }));
+  }
+
+  function removeOne(productId: number) {
+    updateActiveRegister((state) => ({
+      ...state,
+      cartItems: state.cartItems
+        .map((item) => (item.productId === productId ? { ...item, quantity: item.quantity - 1 } : item))
+        .filter((item) => item.quantity > 0)
+    }));
+  }
+
+  function updateItem(productId: number, changes: { name: string; price: number }) {
+    updateActiveRegister((state) => ({
+      ...state,
+      cartItems: state.cartItems.map((item) => (item.productId === productId ? { ...item, name: changes.name, price: changes.price } : item))
+    }));
+  }
+
+  // "Producto no encontrado" (03/11/2026, pedido explicito: "lo paso de
+  // vuelta y me muestra como producto no encontrado"): editarla no era
+  // suficiente -- solo renombraba el renglon, nunca creaba el producto
+  // de verdad, asi que la tablet seguia sin reconocer ese codigo. Esto
+  // reemplaza la linea sintetica por el producto real recien creado
+  // (mismo id que ya quedo en el catalogo), conservando la cantidad.
+  function resolveUnknownItem(oldProductId: number, product: GabyProduct) {
+    updateActiveRegister((state) => ({
+      ...state,
+      cartItems: state.cartItems.map((item) =>
+        item.productId === oldProductId
+          ? { productId: product.id, name: product.name, price: product.price, quantity: item.quantity, imageUrl: product.imageUrl }
+          : item
+      )
+    }));
+  }
+
+  // Solo vacia la caja ACTIVA (pedido explicito: "cobro y confirmo Caja 1,
+  // Caja 1 queda vacia, Caja 2 sigue teniendo sus productos intactos").
+  function clearCart() {
+    updateActiveRegister(() => createEmptyRegisterState());
+  }
+
+  const total = useMemo(() => cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0), [cartItems]);
+
+  const registerSummaries = useMemo<RegisterSummary[]>(
+    () => registerIds.map((id) => ({ id, count: registers[id].cartItems.reduce((sum, item) => sum + item.quantity, 0) })),
+    [registerIds, registers]
+  );
+
+  return {
+    cartItems,
+    lastScannedProductId,
+    addProduct,
+    addManualItem,
+    addManualItemToRegister,
+    addCartItems,
+    addOne,
+    removeOne,
+    updateItem,
+    resolveUnknownItem,
+    clearCart,
+    total,
+    activeRegisterId,
+    setActiveRegisterId,
+    registerSummaries
+  };
+}

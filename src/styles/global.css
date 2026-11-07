@@ -1,0 +1,1809 @@
+:root {
+  font-family: Inter, "Segoe UI", sans-serif;
+  color: #0f172a;
+  background: #f8fafc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.gaby-shell {
+  min-height: 100vh;
+  width: min(1080px, 100%);
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  display: grid;
+  gap: 22px;
+  align-content: start;
+}
+
+.gaby-header {
+  display: grid;
+  gap: 4px;
+}
+
+/* Barra de navegacion del Basico (06/10/2026, pedido explicito): "una
+   pestana productos y una clientes... arriba a la derecha, como un
+   encabezado". Mismo look & feel que la barra del Pro (gaby-pro-nav*)
+   pero con sus propias clases: esta SI es visible siempre, sea el modo
+   que sea, asi que no conviene compartir las clases exclusivas del Pro. */
+.gaby-header--with-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.gaby-header-nav {
+  display: flex;
+  gap: 12px;
+}
+
+/* Mas notorio (06/10/2026, pedido explicito: "hacerla un poquito mas
+   notoria... un botoncito mas notorio") -- paso de texto subrayado a
+   chip con borde, mas grande y mas separado, para que se note a simple
+   vista que es clickeable y cual esta activa. */
+.gaby-header-nav-tab {
+  padding: 10px 20px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #334155;
+  background: #ffffff;
+  border: 2px solid #cbd5e1;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.gaby-header-nav-tab:hover {
+  border-color: #94a3b8;
+}
+
+.gaby-header-nav-tab.is-active {
+  color: #ffffff;
+  background-color: #111;
+  border-color: #111;
+}
+
+.gaby-kicker {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+/* Es un <button> por dentro (acceso al selector de modo con 3 clics, ver
+   GabyHomePage.tsx), pero tiene que verse identico al <p> de siempre. */
+.gaby-kicker--button {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: default;
+  font: inherit;
+}
+
+.gaby-header h1 {
+  margin: 0;
+  font-size: clamp(1.9rem, 5.5vw, 2.7rem);
+}
+
+/* Pestanas de caja (22/09/2026): centradas, arriba del input de escaneo.
+   Ver RegisterTabs.tsx. */
+.gaby-register-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.gaby-register-tab {
+  position: relative;
+  min-width: 120px;
+  padding: 0.65rem 1.4rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #334155;
+  background: #ffffff;
+  border: 2px solid #cbd5e1;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.gaby-register-tab:hover {
+  border-color: #94a3b8;
+}
+
+.gaby-register-tab.is-active {
+  color: #ffffff;
+  background-color: #111;
+  border-color: #111;
+}
+
+.gaby-register-tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  margin-left: 8px;
+  padding: 0 6px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #ffffff;
+  background-color: #dc2626;
+  vertical-align: middle;
+}
+
+/* ============================================================
+   Modo Pro -- mejora visual (24/09/2026, pedido explicito): "que se vea
+   y se sienta mas trabajado, atractivo, ordenado y profesional... el
+   Modo Basico mantiene su diseño actual". TODO lo de este bloque son
+   clases nuevas y exclusivas del Pro (prefijo gaby-pro-* / los
+   subcomponentes de precios): nada de esto lo usa ni lo ve el Basico, y
+   no se toco ninguna clase de las que SI comparten los dos modos
+   (gaby-cart-*, gaby-manual-btn, gaby-checkout, etc. siguen
+   exactamente igual).
+   ============================================================ */
+/* Cabecera clasica, chica y sin protagonismo (24/09/2026, pedido
+   explicito: "mas clasica todavia... que pierda protagonismo la
+   cabecera ya que se va a usar poco... la cabecera mas finita"). Una
+   barra fina pegada arriba, sin tarjeta ni sombra, todo alineado a la
+   izquierda en vez de repartido -- logo y pestanas juntos, como un
+   navbar clasico de toda la vida. Ver ProHeader.tsx. */
+/* Pedido explicito (14/10/2026): "Gaby" queda solo a la izquierda y las
+   pestanas (Productos/Precios/Panel/Clientes) se van a la derecha. */
+.gaby-pro-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 6px 2px 10px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* Pedido explicito (24/09/2026): "quitale el logo y la palabra Pro,
+   solo dejale Gaby" -- sin icono, sin insignia, solo el texto. */
+.gaby-pro-brand {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: default;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.gaby-pro-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Pedido explicito (14/10/2026): "un toque mas de UX... que se vean mas
+   como botones" -- de pestanas subrayadas a chips/pildora con fondo
+   propio, en vez de solo una linea abajo cuando estan activas. */
+.gaby-pro-nav-tab {
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+  background: #f1f5f9;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.gaby-pro-nav-tab:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.gaby-pro-nav-tab.is-active {
+  background: #6366f1;
+  border-color: #6366f1;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.28);
+}
+
+/* "Panel de control" -- Modo Pro (24/09/2026, pedido explicito): ventas +
+   ganancia lado a lado, y Movimientos con el detalle de cada venta. */
+.gaby-dashboard {
+  display: grid;
+  gap: 18px;
+}
+
+.gaby-dashboard-date {
+  margin: 0;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #94a3b8;
+}
+
+.gaby-dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.gaby-dashboard-stat {
+  display: grid;
+  gap: 4px;
+  padding: 18px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+.gaby-dashboard-stat__label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.gaby-dashboard-stat__value {
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.gaby-dashboard-stat--profit .gaby-dashboard-stat__value {
+  color: #15803d;
+}
+
+.gaby-dashboard-stat__hint {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.gaby-dashboard-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.gaby-dashboard-section-title {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #334155;
+}
+
+/* "Ver todos"/"Ver menos" (24/09/2026, pedido explicito: "muy similar
+   al panel de control de el Joker"). */
+.gaby-dashboard-toggle-btn {
+  min-height: 36px;
+  padding: 0 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.gaby-dashboard-toggle-btn:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.gaby-dashboard-movements {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+/* Pedido explicito (14/10/2026): "con un simple click que ya se abra, no
+   preciso apretar la flechita" -- toda la tarjeta es clickeable, no solo
+   la fila del encabezado (antes el resumen de productos colapsado no
+   reaccionaba al click). */
+.gaby-dashboard-movement {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.gaby-dashboard-movement:hover {
+  background: #f8fafc;
+}
+
+/* Pedido explicito (14/10/2026): "dale mas UX, ta muy basico" -- la
+   tarjeta se levanta un poco y se le marca el borde con el color de
+   acento mientras esta abierta, para que se note que es "la ventana que
+   esta abierta ahora", no solo otra fila mas de la lista. */
+.gaby-dashboard-movement.is-expanded {
+  border-color: #6366f1;
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.12);
+}
+
+.gaby-dashboard-movement.is-expanded:hover {
+  background: #ffffff;
+}
+
+.gaby-dashboard-movement__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gaby-dashboard-movement__chevron {
+  display: inline-flex;
+  color: #94a3b8;
+  transition: transform 0.15s ease;
+}
+
+.gaby-dashboard-movement__chevron.is-open {
+  transform: rotate(90deg);
+  color: #6366f1;
+}
+
+/* Numero de venta como chip, en vez de texto plano -- se distingue mas
+   rapido escaneando la lista de arriba a abajo. */
+.gaby-dashboard-movement__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #4338ca;
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.gaby-dashboard-movement__time {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.gaby-dashboard-movement__total {
+  margin-left: auto;
+  color: #0f172a;
+  font-variant-numeric: tabular-nums;
+}
+
+.gaby-dashboard-movement__items {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+/* El detalle expandido, armado como un ticket: items alineados numero
+   contra numero y un renglon de Total separado por una linea solida al
+   pie (antes solo era una lista sin jerarquia -- "muy basico"). */
+.gaby-dashboard-receipt {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed #cbd5e1;
+  animation: gaby-receipt-in 0.15s ease-out;
+}
+
+@keyframes gaby-receipt-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.gaby-dashboard-movement__detail {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 7px;
+}
+
+.gaby-dashboard-movement__detail li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  color: #334155;
+  font-size: 0.93rem;
+}
+
+.gaby-dashboard-movement__item-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.gaby-dashboard-movement__qty {
+  margin-right: 5px;
+  color: #6366f1;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.gaby-dashboard-movement__item-price {
+  flex-shrink: 0;
+  color: #475569;
+  font-variant-numeric: tabular-nums;
+}
+
+.gaby-dashboard-receipt__total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e2e8f0;
+  color: #0f172a;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.gaby-dashboard-reprint-btn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  border: 1px solid #cbd5f5;
+  border-radius: 8px;
+  background: #eef2ff;
+  color: #4338ca;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.gaby-dashboard-reprint-btn:hover {
+  background: #e0e7ff;
+}
+
+.gaby-dashboard-reprint-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* "Precios": subpestanas con icono. */
+.gaby-prices {
+  display: grid;
+  gap: 18px;
+}
+
+.gaby-prices-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.gaby-prices-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #334155;
+  background: #ffffff;
+  border: 2px solid #cbd5e1;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.gaby-prices-tab:hover {
+  border-color: #94a3b8;
+}
+
+.gaby-prices-tab.is-active {
+  color: #ffffff;
+  background-color: #6366f1;
+  border-color: #6366f1;
+}
+
+.gaby-prices-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.gaby-prices-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 1.3rem;
+  color: #0f172a;
+}
+
+.gaby-prices-add-btn {
+  min-height: 52px;
+  padding: 0 1.4rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: #6366f1;
+  border: 1px solid #6366f1;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.gaby-prices-add-btn:hover {
+  background: #4f46e5;
+}
+
+.gaby-prices-panel {
+  padding: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+  overflow-x: auto;
+}
+
+/* table-layout: fixed (24/09/2026, pedido explicito: "las columnas de
+   precio, agregar, editar estan desalineadas, los valores salen mas a la
+   derecha... su titulo esta centrado pero el producto sale mas a la
+   derecha") -- con layout automatico, el ancho de cada columna podia
+   terminar calculandose distinto entre el encabezado y las filas segun
+   el contenido, corriendo los botones. Con table-layout fijo y un ancho
+   explicito por columna (ver los th:nth-child de abajo), encabezado y
+   valores comparten exactamente la misma caja siempre. */
+.gaby-prices-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.gaby-prices-table th:nth-child(2) {
+  width: 100px;
+}
+
+.gaby-prices-table th:nth-child(3) {
+  width: 120px;
+}
+
+.gaby-prices-table th:nth-child(4) {
+  width: 100px;
+}
+
+.gaby-prices-table th {
+  padding: 10px 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #94a3b8;
+  border-bottom: 1px solid #eef2f6;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.gaby-prices-table td {
+  padding: 12px;
+  vertical-align: middle;
+  border-bottom: 1px solid #f5f7fa;
+}
+
+.gaby-prices-table tr:last-child td {
+  border-bottom: none;
+}
+
+.gaby-prices-row-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.gaby-prices-row-price {
+  font-weight: 700;
+  font-size: 1.2rem;
+  white-space: nowrap;
+  color: #0f172a;
+}
+
+.gaby-prices-table__action-col {
+  width: 76px;
+  white-space: nowrap;
+}
+
+.gaby-prices-action-btn {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 2px solid #cbd5e1;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #111;
+  font-weight: 700;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.gaby-prices-action-btn:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.gaby-prices-action-btn--add {
+  color: #4f46e5;
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+.gaby-prices-action-btn--add:hover {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: #6366f1;
+}
+
+.gaby-prices-remove-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 2px solid #b91c1c;
+  border-radius: 10px;
+  background: #dc2626;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.gaby-prices-remove-btn:hover {
+  background: #b91c1c;
+}
+
+.gaby-scanner-dominant {
+  padding: 20px;
+  border: 1px solid #dbe4ee;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+}
+
+.gaby-scanner-input {
+  width: 100%;
+  min-height: 80px;
+  border-radius: 10px;
+  border: 2px solid #cbd5e1;
+  background: #ffffff;
+  padding: 0 16px;
+  font-size: 1.55rem;
+  font-weight: 600;
+  color: #0f172a;
+  text-align: center;
+}
+
+.gaby-scanner-input::placeholder {
+  color: #495057;
+  opacity: 1;
+}
+
+.gaby-scanner-input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.14);
+}
+
+.gaby-scanner-input:disabled {
+  background: #f8fafc;
+  opacity: 0.7;
+}
+
+.gaby-scanner-status {
+  margin: 10px 0 0;
+  font-size: 1.05rem;
+  color: #64748b;
+  text-align: center;
+}
+
+.gaby-scanner-status--error {
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+.gaby-manual-btn {
+  width: fit-content;
+  min-height: 64px;
+  padding: 0.85rem 2.4rem;
+  margin: 0 auto;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  background-color: #111;
+  border: 1px solid #111;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.gaby-manual-btn:hover {
+  background-color: #000;
+}
+
+/* 4 botones de acceso rapido por categoria, Modo Pro (23/09/2026): mismo
+   look que "Producto Manual" pero mas chicos, en grilla, para que quepan
+   los 4 juntos sin ocupar tanto lugar como el boton principal. */
+.gaby-quick-manual-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* Mas finitos, sin protagonismo (24/09/2026, pedido explicito: "vamos a
+   hacerlos mas finitos, no tan altos... sacale protagonismo a los
+   botones") -- gris neutro en vez del acento morado bien marcado, mismo
+   idioma visual que un boton secundario comun. */
+.gaby-manual-btn--quick {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 42px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background-color: #ffffff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+}
+
+.gaby-manual-btn--quick:hover {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.gaby-empty-state {
+  padding: 28px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 18px;
+  background: #ffffff;
+  color: #64748b;
+  text-align: center;
+}
+
+.gaby-thumb-frame {
+  flex-shrink: 0;
+  width: 88px;
+  height: 88px;
+  border-radius: 10px;
+  border: 1px solid #dee2e6;
+  background: #ffffff;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gaby-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gaby-thumb-placeholder {
+  background: linear-gradient(145deg, #f2f4f6, #e9ecef);
+}
+
+.gaby-thumb-placeholder span {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #6c757d;
+}
+
+.gaby-product-name {
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.gaby-price-badge {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 0.22rem 0.7rem;
+  border-radius: 999px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f5132;
+  background-color: rgba(25, 135, 84, 0.18);
+}
+
+.gaby-cart-panel {
+  padding: 12px;
+  border: 1px solid #dbe4ee;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+  overflow-x: auto;
+}
+
+.gaby-cart-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.gaby-cart-table th {
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #6c757d;
+  border-bottom: 1px solid #e9ecef;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.gaby-cart-table th.text-center {
+  text-align: center;
+}
+
+.gaby-cart-table th.text-end {
+  text-align: right;
+}
+
+.gaby-cart-table td {
+  padding: 14px 10px;
+  vertical-align: middle;
+}
+
+.gaby-cart-table tr.is-latest td {
+  background-color: rgba(107, 114, 128, 0.18);
+}
+
+.gaby-cart-table__product {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gaby-cart-table__strong {
+  font-weight: 700;
+  font-size: 1.4rem;
+  white-space: nowrap;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-end {
+  text-align: right;
+}
+
+.gaby-edit-btn {
+  min-height: 52px;
+  padding: 0 20px;
+  border: 2px solid #ced4da;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #111;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.gaby-edit-btn:hover {
+  background: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+/* Columna de "Quitar": ~8% del ancho de la fila, con un minimo para que en
+   pantallas angostas siga siendo una zona grande y facil de tocar. */
+.gaby-cart-table__remove-col {
+  width: 8%;
+  min-width: 76px;
+  text-align: center;
+}
+
+/* Pedido explicito (20/09/2026, pensado para personas mayores): en vez de
+   una crucecita chica, una zona roja grande y clara al final de cada fila. */
+.gaby-cart-row__remove {
+  display: block;
+  width: 100%;
+  min-height: 72px;
+  border: 2px solid #b91c1c;
+  border-radius: 10px;
+  background: #dc2626;
+  color: #ffffff;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.gaby-cart-row__remove:hover {
+  background: #b91c1c;
+}
+
+.gaby-cart-row__remove:focus-visible {
+  outline: 4px solid rgba(220, 38, 38, 0.35);
+  outline-offset: 2px;
+}
+
+.gaby-modal-field {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 1.1rem;
+}
+
+.gaby-modal-field span {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.gaby-modal-field input,
+.gaby-modal-field select {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  min-height: 60px;
+  border-radius: 10px;
+  border: 2px solid #cbd5e1;
+  padding: 0 14px;
+  font-size: 1.3rem;
+  background: #fff;
+}
+
+/* Selector de modo (23/09/2026): ver GabyModeModal.tsx. */
+.gaby-mode-options {
+  display: grid;
+  gap: 12px;
+}
+
+.gaby-mode-option {
+  display: grid;
+  gap: 4px;
+  text-align: left;
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  border: 2px solid #cbd5e1;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.gaby-mode-option:hover {
+  border-color: #94a3b8;
+}
+
+.gaby-mode-option strong {
+  font-size: 1.15rem;
+}
+
+.gaby-mode-option span {
+  color: #64748b;
+}
+
+.gaby-mode-option.is-active {
+  border-color: #111;
+  background: rgba(17, 17, 17, 0.04);
+}
+
+.gaby-modal-field input:focus,
+.gaby-modal-field select:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.14);
+}
+
+.gaby-checkout {
+  padding: 20px 22px;
+  border: 1px solid #dbe4ee;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+}
+
+.gaby-checkout__total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.gaby-checkout__total-row span {
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #212529;
+}
+
+.gaby-checkout__total-row strong {
+  font-size: 2.1rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #111;
+}
+
+.gaby-charge-btn {
+  width: 100%;
+  min-height: 76px;
+  padding: 0.85rem 2rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  background-color: #111;
+  border: 1px solid #111;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.gaby-charge-btn:hover {
+  background-color: #000;
+}
+
+.gaby-checkout__buttons-row {
+  display: flex;
+  gap: 10px;
+}
+
+.gaby-checkout__buttons-row .gaby-charge-btn {
+  flex: 2;
+}
+
+.gaby-fiar-btn {
+  flex: 1;
+  min-height: 76px;
+  padding: 0.85rem 1rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #111;
+  background-color: #fff;
+  border: 2px solid #111;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.gaby-fiar-btn:hover {
+  background-color: #f1f1f1;
+}
+
+/* Clientes / cuenta corriente (06/10/2026, re-trabajado: "esto no es
+   para celular, usa toda la pantalla... dale un poco mas de trabajo a
+   las deudas, un color... muy similar a lo de Joker"). Pantalla de PC:
+   se usa .gaby-shell--wide (ver GabyHomePage.tsx) para que el shell
+   no quede limitado a los 1080px pensados para el escaner en celular. */
+.gaby-shell--wide {
+  width: min(1680px, 98vw);
+}
+
+.gaby-clientes {
+  padding: 4px 0 20px;
+}
+
+/* 3 columnas lado a lado (pedido explicito: "como habiamos hecho en el
+   Joker"). Se apilan solo en pantallas chicas -- esta pantalla es de PC,
+   asi que el breakpoint es bajo (700px) nomas por las dudas. */
+.gaby-clientes-columns {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 700px) {
+  .gaby-clientes-columns {
+    grid-template-columns: minmax(300px, 340px) minmax(340px, 420px) minmax(420px, 1fr);
+    align-items: start;
+  }
+}
+
+.gaby-clientes-col {
+  min-width: 0;
+  border: 1px solid #dbe4ee;
+  border-radius: 16px;
+  background: #fff;
+  padding: 24px;
+}
+
+.gaby-clientes-col-title {
+  margin: 0 0 16px;
+  font-size: 1.3rem;
+}
+
+.gaby-clientes-form {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Los campos venian de .gaby-modal-field, pensados para un modal chico
+   -- sin un ancho explicito el input podia quedar mas angosto o mas
+   ancho que la tarjeta segun el navegador ("el input sale de la caja de
+   nuevo cliente"). Width 100% + min-width:0 lo deja siempre del ancho
+   exacto de la columna. */
+.gaby-clientes-form .gaby-modal-field {
+  width: 100%;
+  min-width: 0;
+}
+
+.gaby-clientes-form .gaby-modal-field input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.gaby-clientes-detail-header h3 {
+  margin: 0 0 2px;
+  font-size: 1.4rem;
+}
+
+.gaby-clientes-back {
+  border: none;
+  background: none;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 16px;
+}
+
+.gaby-clientes-search {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  min-height: 52px;
+  padding: 0 16px;
+  border: 1px solid #dbe4ee;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  margin-bottom: 16px;
+}
+
+.gaby-clientes-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gaby-clientes-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 20px;
+  border: 1px solid #dbe4ee;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+}
+
+.gaby-clientes-row__name {
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+/* "Dale un poco mas de trabajo a las deudas, un color" -- pastilla roja
+   suave cuando debe (mismo espiritu que el .joker-cc-hero__debt de
+   Joker, pero como badge en la lista en vez de solo texto). Sin deuda,
+   pastilla verde discreta -- asi se nota a simple vista quien debe sin
+   tener que leer el numero. */
+.gaby-clientes-row__debt {
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 7px 14px;
+  border-radius: 999px;
+  color: #166534;
+  background: #dcfce7;
+}
+
+.gaby-clientes-row__debt--owes {
+  color: #991b1b;
+  background: #fee2e2;
+}
+
+.gaby-clientes-row.is-active {
+  border-color: #111;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.gaby-clientes-detail-header h2 {
+  margin: 0 0 2px;
+}
+
+.gaby-clientes-meta {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+/* Hero del saldo (visualmente parecido al de Joker: tarjeta oscura con
+   el numero grande en rojo cuando hay deuda). */
+.gaby-clientes-saldo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f4f6f8;
+  border-radius: 14px;
+  padding: 18px 22px;
+  margin: 18px 0;
+}
+
+.gaby-clientes-saldo span {
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b7280;
+}
+
+.gaby-clientes-saldo strong {
+  font-size: 1.8rem;
+}
+
+.gaby-clientes-saldo--owes {
+  background: linear-gradient(135deg, #1a1a1a 0%, #3a0d10 100%);
+}
+
+.gaby-clientes-saldo--owes span {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.gaby-clientes-saldo--owes strong {
+  color: #ff9c9c;
+}
+
+.gaby-clientes-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.gaby-clientes-actions .gaby-button {
+  flex: none;
+  min-width: 170px;
+}
+
+.gaby-clientes-confirm-text {
+  font-weight: 600;
+}
+
+.gaby-clientes-section-title {
+  margin: 20px 0 12px;
+  font-size: 1.1rem;
+}
+
+.gaby-clientes-entries {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gaby-clientes-entry {
+  border: 1px solid #dbe4ee;
+  border-radius: 10px;
+  padding: 14px 16px;
+  background: #fff;
+}
+
+.gaby-clientes-entry__header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 1.05rem;
+}
+
+.gaby-clientes-entry__items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gaby-clientes-danger-zone {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 14px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.gaby-modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1050;
+}
+
+.gaby-modal-card {
+  width: 100%;
+  max-width: 560px;
+  border-radius: 14px;
+  background: #fff;
+  padding: 1.4rem 1.4rem 1.7rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.gaby-modal-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.9rem;
+}
+
+.gaby-modal-card__header h2 {
+  margin: 0;
+  font-size: 1.55rem;
+}
+
+.gaby-modal-close {
+  min-height: 52px;
+  padding: 0 18px;
+  font-size: 1.05rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.gaby-modal-card__total-label {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #6c757d;
+}
+
+.gaby-modal-card__total {
+  margin: 0 0 1.1rem;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.gaby-modal-card__label {
+  margin: 0 0 0.7rem;
+  font-size: 1.1rem;
+  color: #6c757d;
+}
+
+.gaby-modal-card__actions {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.gaby-button {
+  flex: 1;
+  min-height: 64px;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* Pista de la tecla Enter debajo de los botones de cada modal (pedido
+   explicito 20/09/2026: Enter = accion principal en todos lados). */
+.gaby-enter-hint {
+  margin: 0.9rem 0 0;
+  text-align: center;
+  font-size: 1.05rem;
+  color: #64748b;
+}
+
+/* Modal de cobro simplificado -- pedido explicito (16/09/2026): "saca
+   lo de tarjeta efectivo y demas, que apriete cobrar salga el modal
+   mas grande para confirmar con el precio". Sin selector de medio de
+   pago: solo el total, bien grande, y confirmar. */
+.gaby-modal-card--checkout {
+  max-width: 480px;
+  padding: 2.4rem 1.8rem 1.8rem;
+  text-align: center;
+}
+
+.gaby-modal-card__total--big {
+  margin: 0 0 1.8rem;
+  font-size: 3.8rem;
+}
+
+.gaby-modal-card__actions--big {
+  flex-direction: column-reverse;
+  gap: 0.7rem;
+}
+
+.gaby-button--big {
+  min-height: 80px;
+  font-size: 1.45rem;
+}
+
+.gaby-button--ghost {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #0f172a;
+}
+
+.gaby-button--primary {
+  border: 1px solid #111;
+  background: #111;
+  color: #fff;
+}
+
+/* Cancelar: rojo, grande y claro (pedido explicito 20/09/2026). Confirmar /
+   Guardar / Agregar siguen siendo la accion principal (negro). */
+.gaby-button--danger {
+  border: 2px solid #b91c1c;
+  background: #dc2626;
+  color: #fff;
+}
+
+.gaby-button--danger:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.gaby-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 420px) {
+  .gaby-cart-table__strong {
+    font-size: 1.05rem;
+  }
+}
+
+/* Selector de impresora (Basico, 24/09/2026): boton chico y discreto. */
+.gaby-printer-btn {
+  justify-self: end;
+  align-self: flex-start;
+  margin-left: auto;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #475569;
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+/* Selector de cantidad "- 20 +" del carrito (25/09/2026): botones grandes. */
+.gaby-qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.gaby-qty-btn {
+  width: 56px;
+  height: 56px;
+  border: 2px solid #ced4da;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #111;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.gaby-qty-btn:hover {
+  background: #f1f3f5;
+  border-color: #adb5bd;
+}
+
+.gaby-qty-btn:active {
+  background: #e9ecef;
+}
+
+.gaby-qty-value {
+  min-width: 2ch;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .gaby-qty-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 1.6rem;
+  }
+  .gaby-qty-stepper {
+    gap: 6px;
+  }
+}
+
+/* Pestana "Tickets" (Modo Pro, 24/10/2026): reusa la tabla de Precios;
+   la columna del codigo va en letra monoespaciada para leerla facil. */
+.gaby-tickets-code {
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* Columnas propias de la tabla de Tickets (la de Precios tiene otro
+   orden de columnas). */
+.gaby-tickets-table th:nth-child(1) {
+  width: 130px;
+}
+
+.gaby-tickets-table th:nth-child(2) {
+  width: auto;
+}
+
+.gaby-tickets-table th:nth-child(3) {
+  width: 110px;
+}
+
+.gaby-tickets-table th:nth-child(4),
+.gaby-tickets-table th:nth-child(5) {
+  width: 120px;
+}
+
+.gaby-tickets-table th.text-center {
+  text-align: center;
+}
+
+.gaby-tickets-table th.text-end {
+  text-align: right;
+}
+
+/* ---------- Venta del fondo (30/10/2026, pedido explicito) ----------
+   Pestaña "Tablet": pensada para una persona mayor -- letra grande, lista
+   simple, un boton grande. En el mostrador: cartel flotante abajo. */
+.gaby-tablet {
+  display: grid;
+  gap: 16px;
+}
+
+.gaby-tablet__title strong {
+  display: block;
+  font-size: 1.8rem;
+}
+
+.gaby-tablet__title span {
+  font-size: 1.05rem;
+  color: #64748b;
+}
+
+.gaby-tablet__notice {
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: #dcfce7;
+  color: #166534;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.gaby-tablet__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.gaby-tablet__list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  font-size: 1.3rem;
+}
+
+.gaby-tablet__qty {
+  font-weight: 800;
+  color: #7c3aed;
+  min-width: 44px;
+}
+
+.gaby-tablet__name {
+  flex: 1;
+  font-weight: 600;
+}
+
+.gaby-tablet__price {
+  font-weight: 800;
+}
+
+.gaby-tablet__minus {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  border: 2px solid #cbd5e1;
+  background: #f8fafc;
+  font-size: 1.6rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.gaby-tablet__empty {
+  margin: 0;
+  padding: 24px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 1.2rem;
+}
+
+.gaby-tablet__footer {
+  display: grid;
+  gap: 12px;
+}
+
+.gaby-tablet__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 1.3rem;
+  color: #475569;
+}
+
+.gaby-tablet__total strong {
+  font-size: 2.2rem;
+  color: #0f172a;
+}
+
+.gaby-tablet__send {
+  min-height: 76px;
+  border: none;
+  border-radius: 18px;
+  background: #16a34a;
+  color: #ffffff;
+  font-size: 1.6rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.gaby-tablet__send:disabled {
+  background: #cbd5e1;
+  cursor: default;
+}
+
+.gaby-tablet__send.is-sent {
+  background: #0ea5e9;
+}
+
+.gaby-tablet__clear {
+  min-height: 48px;
+  border-radius: 14px;
+  border: 2px solid #fecaca;
+  background: #fff5f5;
+  color: #b91c1c;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Pedidos del fondo apilados en orden (Pedido 1 arriba). */
+.gaby-fondo-stack {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 4px 12px 4px 0;
+}
+
+.gaby-fondo-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 999px;
+  background: #1e293b;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.35);
+  cursor: pointer;
+}
+
+.gaby-fondo-pill b {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #22c55e;
+  font-size: 0.85rem;
+}
+
+.gaby-fondo-pill.is-sent {
+  background: #15803d;
+  animation: gaby-fondo-pulse 1.2s ease-in-out infinite;
+}
+
+/* "Tomar y seguir recibiendo" (03/11/2026): chip informativo, no es un
+   boton -- mientras el borrador esta reclamado no hay nada para tomar,
+   los productos nuevos se suman solos. */
+.gaby-fondo-pill--live {
+  background: #7f1d1d;
+  cursor: default;
+}
+
+@keyframes gaby-fondo-pulse {
+  0%, 100% { box-shadow: 0 12px 28px rgba(21, 128, 61, 0.35), 0 0 0 0 rgba(34, 197, 94, 0.55); }
+  50% { box-shadow: 0 12px 28px rgba(21, 128, 61, 0.35), 0 0 0 10px rgba(34, 197, 94, 0); }
+}
+
+.gaby-fondo-list {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+  max-height: 46vh;
+  overflow-y: auto;
+}
+
+.gaby-fondo-list li {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #f8fafc;
+  font-size: 1.1rem;
+}
+
+.gaby-fondo-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.gaby-fondo-total strong {
+  font-size: 1.8rem;
+}
+
+/* Producto manual en la tablet del fondo: boton grande, facil de tocar. */
+.gaby-tablet__manual {
+  min-height: 96px;
+  border-radius: 16px;
+  border: none;
+  background: #000000;
+  color: #ffffff;
+  font-size: 1.6rem;
+  font-weight: 800;
+  cursor: pointer;
+}

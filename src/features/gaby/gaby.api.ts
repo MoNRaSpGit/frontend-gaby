@@ -158,6 +158,16 @@ export async function createClient(name: string, phone?: string, address?: strin
   return readJson<GabyClient>(response);
 }
 
+// Corregir nombre/telefono/direccion de un cliente (12/11/2026).
+export async function updateClient(clientId: number, name: string, phone: string, address: string): Promise<GabyClient> {
+  const response = await fetch(`${API_BASE_URL}/gaby/clients/${clientId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, phone, address })
+  });
+  return readJson<GabyClient>(response);
+}
+
 export async function deleteClient(clientId: number): Promise<void> {
   const response = await fetch(`${API_BASE_URL}/gaby/clients/${clientId}`, { method: "DELETE" });
   await readJson<{ ok: true }>(response);

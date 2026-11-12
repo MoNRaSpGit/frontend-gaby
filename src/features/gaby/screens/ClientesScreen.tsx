@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { toast } from "react-toastify";
-import { createClient, deleteClient, listAccountEntries, listClients, settleAccount } from "../gaby.api";
+import { createClient, deleteClient, listAccountEntries, listClients, settleAccount, updateClient } from "../gaby.api";
 import type { GabyAccountEntry, GabyClient } from "../gaby.types";
 
 function formatCurrency(amount: number) {
@@ -41,6 +41,13 @@ export function ClientesScreen({ onClose }: { onClose: () => void }) {
 
   const [isConfirmingSettle, setIsConfirmingSettle] = useState(false);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+
+  // Edicion del cliente elegido (corregir un nombre mal escrito).
+  const [isEditing, setIsEditing] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [editPhone, setEditPhone] = useState("");
+  const [editAddress, setEditAddress] = useState("");
+  const [isSavingEdit, setIsSavingEdit] = useState(false);
 
   function reload() {
     Promise.all([listClients(), listAccountEntries()])
@@ -93,6 +100,36 @@ export function ClientesScreen({ onClose }: { onClose: () => void }) {
       setCreateError(error instanceof Error ? error.message : "No se pudo crear el cliente.");
     } finally {
       setIsCreating(false);
+    }
+  }
+
+  function startEditing() {
+    if (!selectedClient) return;
+    setEditName(selectedClient.name);
+    setEditPhone(selectedClient.phone ?? "");
+    setEditAddress(selectedClient.address ?? "");
+    setIsConfirmingSettle(false);
+    setIsConfirmingDelete(false);
+    setIsEditing(true);
+  }
+
+  async function handleSaveEdit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (selectedClientId === null) return;
+    if (editName.trim().length < 2) {
+      toast.error("El nombre tiene que tener al menos 2 letras.");
+      return;
+    }
+    setIsSavingEdit(true);
+    try {
+      await updateClient(selectedClientId, editName.trim(), editPhone.trim(), editAddress.trim());
+      toast.success("Cliente actualizado.");
+      setIsEditing(false);
+      reload();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "No se pudo guardar el cambio.");
+    } finally {
+      setIsSavingEdit(false);
     }
   }
 
@@ -178,6 +215,7 @@ export function ClientesScreen({ onClose }: { onClose: () => void }) {
                       className={isActive ? "gaby-clientes-row is-active" : "gaby-clientes-row"}
                       onClick={() => {
                         setSelectedClientId(client.id);
+                        setIsEditing(false);
                         setIsConfirmingSettle(false);
                         setIsConfirmingDelete(false);
                       }}
@@ -203,11 +241,39 @@ export function ClientesScreen({ onClose }: { onClose: () => void }) {
             </section>
           ) : (
             <>
-              <div className="gaby-clientes-detail-header">
-                <h3>{selectedClient.name}</h3>
-                {selectedClient.phone ? <p className="gaby-clientes-meta">{selectedClient.phone}</p> : null}
-                {selectedClient.address ? <p className="gaby-clientes-meta">{selectedClient.address}</p> : null}
-              </div>
+              {isEditing ? (
+                <form onSubmit={handleSaveEdit} className="gaby-clientes-form gaby-clientes-edit">
+                  <label className="gaby-modal-field">
+                    <span>Nombre</span>
+                    <input value={editName} onChange={(event) => setEditName(event.target.value)} disabled={isSavingEdit} autoFocus />
+                  </label>
+                  <label className="gaby-modal-field">
+                    <span>Telefono (opcional)</span>
+                    <input value={editPhone} onChange={(event) => setEditPhone(event.target.value)} disabled={isSavingEdit} />
+                  </label>
+                  <label className="gaby-modal-field">
+                    <span>Direccion (opcional)</span>
+                    <input value={editAddress} onChange={(event) => setEditAddress(event.target.value)} disabled={isSavingEdit} />
+                  </label>
+                  <div className="gaby-clientes-actions">
+                    <button type="submit" className="gaby-button gaby-button--primary" disabled={isSavingEdit}>
+                      {isSavingEdit ? "Guardando..." : "Guardar"}
+                    </button>
+                    <button type="button" className="gaby-button gaby-button--ghost" onClick={() => setIsEditing(false)} disabled={isSavingEdit}>
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <div className="gaby-clientes-detail-header">
+                  <h3>{selectedClient.name}</h3>
+                  {selectedClient.phone ? <p className="gaby-clientes-meta">{selectedClient.phone}</p> : null}
+                  {selectedClient.address ? <p className="gaby-clientes-meta">{selectedClient.address}</p> : null}
+                  <button type="button" className="gaby-button gaby-button--ghost gaby-clientes-edit-btn" onClick={startEditing}>
+                    ✎ Editar cliente
+                  </button>
+                </div>
+              )}
 
               <div className={selectedSaldo > 0 ? "gaby-clientes-saldo gaby-clientes-saldo--owes" : "gaby-clientes-saldo"}>
                 <span>Debe</span>

@@ -107,3 +107,15 @@ export type GabyAccountEntry = {
   items: GabyAccountEntryItem[];
   createdAt: string;
 };
+
+// Pestana "Mes" (misma idea que el Mes de El Joker).
+export type GabyMonthDay = { fecha: string; diaSemana: string; total: number };
+export type GabyMonthWeek = { numero: number; total: number; dias: GabyMonthDay[] };
+export type GabyMonthSummary = {
+  anio: number;
+  mes: number;
+  total: number;
+  profitMarginRatio: number;
+  semanas: GabyMonthWeek[];
+};
+export type GabyMonthHistoryItem = { anio: number; mes: number; total: number };

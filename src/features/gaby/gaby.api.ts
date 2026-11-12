@@ -5,6 +5,8 @@ import type {
   GabyClient,
   GabyPaymentMethod,
   GabyPriceCategory,
+  GabyMonthHistoryItem,
+  GabyMonthSummary,
   GabyPriceEntry,
   GabyProduct,
   GabySale,
@@ -205,4 +207,15 @@ export async function setProductStock(productId: number, stock: number): Promise
   });
   const raw = await readJson<RawProductResponse>(response);
   return mapProduct(raw.item);
+}
+
+// Pestana "Mes": resumen del mes por semanas/dias y historico de meses.
+export async function getMonthSummary(year: number, month: number): Promise<GabyMonthSummary> {
+  const response = await fetch(`${API_BASE_URL}/gaby/sales/month?year=${year}&month=${month}`, { cache: "no-store" });
+  return readJson<GabyMonthSummary>(response);
+}
+
+export async function getMonthHistory(months = 6): Promise<{ items: GabyMonthHistoryItem[] }> {
+  const response = await fetch(`${API_BASE_URL}/gaby/sales/month-history?months=${months}`, { cache: "no-store" });
+  return readJson<{ items: GabyMonthHistoryItem[] }>(response);
 }

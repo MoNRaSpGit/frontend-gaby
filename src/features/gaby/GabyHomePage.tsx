@@ -11,6 +11,7 @@ import { useGabyCart } from "./hooks/useGabyCart";
 import type { GabyClient } from "./gaby.types";
 import { ClientesScreen } from "./screens/ClientesScreen";
 import { GabyDashboardScreen } from "./screens/GabyDashboardScreen";
+import { MesScreen } from "./screens/MesScreen";
 import { setAppBusy } from "../../shared/state/appActivity";
 
 // Gaby Almacen (07/11/2026): version BASICA de Piloto -- escaner, venta,
@@ -18,7 +19,7 @@ import { setAppBusy } from "../../shared/state/appActivity";
 // tablet del fondo, sin precios/tickets ni impresion (la clienta pidio solo
 // lo basico). Pestanas: Productos, Clientes y Panel. La pestana Stock se oculto (el codigo
 // de StockScreen.tsx sigue en el repo para cuando se use).
-type GabyTopTab = "productos" | "clientes" | "panel";
+type GabyTopTab = "productos" | "clientes" | "panel" | "mes";
 
 const NOT_FOUND_MESSAGE = "Producto no encontrado.";
 // No se elige medio de pago en la UI: se manda siempre este valor fijo.
@@ -35,7 +36,7 @@ const ACTIVE_TAB_STORAGE_KEY = "gaby-active-top-tab";
 function loadStoredTopTab(): GabyTopTab | null {
   try {
     const stored = window.localStorage.getItem(ACTIVE_TAB_STORAGE_KEY);
-    return stored === "productos" || stored === "clientes" || stored === "panel" ? stored : null;
+    return stored === "productos" || stored === "clientes" || stored === "panel" || stored === "mes" ? stored : null;
   } catch {
     return null;
   }
@@ -265,6 +266,15 @@ export function GabyHomePage() {
           >
             Panel
           </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTopTab === "mes"}
+            className={activeTopTab === "mes" ? "gaby-header-nav-tab is-active" : "gaby-header-nav-tab"}
+            onClick={() => setActiveTopTab("mes")}
+          >
+            Mes
+          </button>
         </nav>
       </header>
 
@@ -272,6 +282,8 @@ export function GabyHomePage() {
         <ClientesScreen onClose={() => setActiveTopTab("productos")} />
       ) : activeTopTab === "panel" ? (
         <GabyDashboardScreen />
+      ) : activeTopTab === "mes" ? (
+        <MesScreen />
       ) : (
         <>
           <ScannerInput

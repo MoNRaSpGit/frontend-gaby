@@ -1807,3 +1807,28 @@ input {
   font-weight: 800;
   cursor: pointer;
 }
+
+/* Pestana "Mes" (11/11/2026, pedido explicito: igual que el Mes de Joker/Eme). */
+.gaby-mes { display: grid; gap: 16px; }
+.gaby-mes-header { display: flex; align-items: center; justify-content: center; gap: 16px; }
+.gaby-mes-title { margin: 0; min-width: 190px; text-align: center; font-size: 1.3rem; color: #0f172a; }
+.gaby-mes-nav { width: 42px; height: 42px; font-size: 1.4rem; font-weight: 700; color: #334155; background: #ffffff; border: 2px solid #cbd5e1; border-radius: 999px; cursor: pointer; }
+.gaby-mes-nav:hover { border-color: #94a3b8; }
+.gaby-mes-week { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; }
+.gaby-mes-week-head { width: 100%; display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: transparent; border: 0; cursor: pointer; text-align: left; }
+.gaby-mes-week-head h3 { flex: 1; margin: 0; font-size: 1.05rem; color: #0f172a; }
+.gaby-mes-week-arrow { width: 14px; color: #94a3b8; }
+.gaby-mes-week-totals { display: grid; text-align: right; }
+.gaby-mes-week-totals small { font-size: 0.8rem; font-weight: 700; color: #15803d; }
+.gaby-mes-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.gaby-mes-table th { padding: 8px 16px; text-align: left; font-size: 0.8rem; color: #64748b; border-top: 1px solid #e2e8f0; }
+.gaby-mes-table td { padding: 10px 16px; border-top: 1px solid #e2e8f0; }
+.gaby-mes-table .is-num { text-align: right; white-space: nowrap; }
+.gaby-mes-table .is-profit { color: #15803d; font-weight: 700; }
+.gaby-mes-table .is-empty { color: #94a3b8; }
+.gaby-mes-chart { display: grid; gap: 10px; }
+.gaby-mes-chart-card { padding: 12px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; overflow-x: auto; }
+.gaby-mes-chart-svg { display: block; width: 100%; min-width: 480px; height: auto; }
+.gaby-mes-chart-grid { stroke: #e2e8f0; stroke-width: 1; stroke-dasharray: 3 4; }
+.gaby-mes-chart-value { fill: #0f172a; font-size: 11px; font-weight: 700; }
+.gaby-mes-chart-label { fill: #64748b; font-size: 11px; }

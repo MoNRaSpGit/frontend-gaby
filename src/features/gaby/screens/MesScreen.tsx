@@ -51,7 +51,7 @@ export function MesScreen() {
   }, [year, month]);
 
   useEffect(() => {
-    getMonthHistory(6)
+    getMonthHistory(12)
       .then((data) => setHistory(data.items))
       .catch(() => setHistory(null));
   }, []);
@@ -71,11 +71,25 @@ export function MesScreen() {
     setMonth(date.getMonth() + 1);
   }
 
+  // Total del anio en curso: suma de los meses del historial que son de este anio.
+  const yearTotal = history ? history.filter((item) => item.anio === today.year).reduce((sum, item) => sum + item.total, 0) : null;
+  const chartMonths = history ? history.slice(-6) : null;
+
   const profitPercent = summary ? Math.round(summary.profitMarginRatio * 100) : 30;
   const profitOf = (amount: number) => (summary ? amount * summary.profitMarginRatio : 0);
 
   return (
     <div className="gaby-mes">
+      {yearTotal !== null ? (
+        <div className="gaby-mes-year">
+          <div className="gaby-mes-year-card">
+            <span className="gaby-mes-year-label">Este año ({today.year})</span>
+            <strong className="gaby-mes-year-total">{formatCurrency(yearTotal)}</strong>
+            <small className="gaby-mes-year-profit">Ganancia +{formatCurrency(yearTotal * (summary?.profitMarginRatio ?? 0.3))}</small>
+          </div>
+        </div>
+      ) : null}
+
       <div className="gaby-mes-header">
         <button type="button" className="gaby-mes-nav" onClick={() => shiftMonth(-1)} aria-label="Mes anterior">
           ‹
@@ -146,7 +160,7 @@ export function MesScreen() {
         </>
       ) : null}
 
-      {history && history.some((item) => item.total > 0) ? <GraficoVentasMensuales months={history} /> : null}
+      {chartMonths && chartMonths.some((item) => item.total > 0) ? <GraficoVentasMensuales months={chartMonths} /> : null}
     </div>
   );
 }

@@ -1836,3 +1836,10 @@ input {
 /* Editar cliente (12/11/2026). */
 .gaby-clientes-edit-btn { margin-top: 8px; }
 .gaby-clientes-edit { margin-bottom: 8px; }
+
+/* Tarjeta del año (12/11/2026). */
+.gaby-mes-year { display: flex; justify-content: flex-end; }
+.gaby-mes-year-card { display: grid; gap: 2px; text-align: right; padding: 10px 16px; background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 14px; }
+.gaby-mes-year-label { font-size: 0.8rem; font-weight: 700; color: #4f46e5; }
+.gaby-mes-year-total { font-size: 1.4rem; color: #0f172a; }
+.gaby-mes-year-profit { font-size: 0.8rem; font-weight: 700; color: #15803d; }

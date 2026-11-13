@@ -80,19 +80,6 @@ export function MesScreen() {
 
   return (
     <div className="gaby-mes">
-      {yearTotal !== null ? (
-        <div className="gaby-dashboard-stats">
-          <div className="gaby-dashboard-stat">
-            <span className="gaby-dashboard-stat__label">Total del año {today.year}</span>
-            <strong className="gaby-dashboard-stat__value">{formatCurrency(yearTotal)}</strong>
-          </div>
-          <div className="gaby-dashboard-stat gaby-dashboard-stat--profit">
-            <span className="gaby-dashboard-stat__label">Ganancia del año</span>
-            <strong className="gaby-dashboard-stat__value">{formatCurrency(yearTotal * (summary?.profitMarginRatio ?? 0.3))}</strong>
-          </div>
-        </div>
-      ) : null}
-
       <div className="gaby-mes-header">
         <button type="button" className="gaby-mes-nav" onClick={() => shiftMonth(-1)} aria-label="Mes anterior">
           ‹
@@ -119,6 +106,10 @@ export function MesScreen() {
             <div className="gaby-dashboard-stat gaby-dashboard-stat--profit">
               <span className="gaby-dashboard-stat__label">Ganancia ({profitPercent}%)</span>
               <strong className="gaby-dashboard-stat__value">{formatCurrency(profitOf(summary.total))}</strong>
+            </div>
+            <div className="gaby-dashboard-stat">
+              <span className="gaby-dashboard-stat__label">Año {today.year}</span>
+              <strong className="gaby-dashboard-stat__value">{yearTotal !== null ? formatCurrency(yearTotal) : "..."}</strong>
             </div>
           </div>
 

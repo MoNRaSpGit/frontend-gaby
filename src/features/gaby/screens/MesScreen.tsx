@@ -81,11 +81,14 @@ export function MesScreen() {
   return (
     <div className="gaby-mes">
       {yearTotal !== null ? (
-        <div className="gaby-mes-year">
-          <div className="gaby-mes-year-card">
-            <span className="gaby-mes-year-label">Este año ({today.year})</span>
-            <strong className="gaby-mes-year-total">{formatCurrency(yearTotal)}</strong>
-            <small className="gaby-mes-year-profit">Ganancia +{formatCurrency(yearTotal * (summary?.profitMarginRatio ?? 0.3))}</small>
+        <div className="gaby-dashboard-stats">
+          <div className="gaby-dashboard-stat">
+            <span className="gaby-dashboard-stat__label">Total del año {today.year}</span>
+            <strong className="gaby-dashboard-stat__value">{formatCurrency(yearTotal)}</strong>
+          </div>
+          <div className="gaby-dashboard-stat gaby-dashboard-stat--profit">
+            <span className="gaby-dashboard-stat__label">Ganancia del año</span>
+            <strong className="gaby-dashboard-stat__value">{formatCurrency(yearTotal * (summary?.profitMarginRatio ?? 0.3))}</strong>
           </div>
         </div>
       ) : null}
